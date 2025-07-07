@@ -1,93 +1,56 @@
 import unittest
+import json
 from robo import *
 
-class TesteSaudacoes(unittest.TestCase):
+# Carrega as conversas para usar nos testes
+with open('conversas/estabelecimentos_saude.json', 'r', encoding='utf-8') as f:
+    ESTABELECIMENTOS = json.load(f)['conversas']
+
+with open('conversas/saudacoes.json', 'r', encoding='utf-8') as f:
+    SAUDACOES = json.load(f)['conversas']
+
+class TesteBotesus(unittest.TestCase):
 
     @classmethod
-    def setUpClass(self):
-        self.inicializado, self.robo = inicializar()
+    def setUpClass(cls):
+        cls.inicializado, cls.robo = inicializar()
 
     def testar_00_inicializado(self):
         self.assertTrue(self.inicializado)
 
-    def testar_01_oi_ola(self):
-        saudacoes = ["oi", "olá", "oi, tudo bem?"]
-
-        for saudacao in saudacoes:
-            print(f"testando a saudação: {saudacao}")
-
+    def testar_01_saudacoes(self):
+        # Testa a primeira saudação de cada bloco no JSON
+        for bloco in SAUDACOES:
+            saudacao = bloco["mensagens"][0]
+            resposta_esperada = bloco["resposta"]
+            
+            print(f"Testando a saudação: {saudacao}")
             resposta, confianca = get_resposta(self.robo, saudacao)
-            self.assertGreaterEqual(confianca, CONFIANCA_MINIMA)
-            self.assertIn("sou o IFBABot, robô de atendimento do IFBA", resposta)
+            self.assertGreaterEqual(confianca, CONFIANCA_MINIMA, f"Confiança baixa para '{saudacao}'")
+            self.assertEqual(resposta, resposta_esperada)
 
-    def testar_02_variabilidades(self):
-        saudacoes = ["como vai?", "olá, como vai?", "olá, tudo bem?", "tudo bem?"]
+    def testar_02_estabelecimentos_encontrados(self):
+        # Testa alguns estabelecimentos para garantir que o adaptador lógico os encontre
+        estabelecimentos_para_testar = ESTABELECIMENTOS[:3] # Testa os 3 primeiros
 
-        for saudacao in saudacoes:
-            print(f"testando: {saudacao}")
+        for est in estabelecimentos_para_testar:
+            nome_estabelecimento = est["mensagens"][0]
+            resposta_esperada = est["resposta"]
 
-            resposta, confianca = get_resposta(self.robo, saudacao)
-            self.assertGreaterEqual(confianca, CONFIANCA_MINIMA)
-            self.assertIn("sou o IFBABot, robô de atendimento do IFBA", resposta)
+            print(f"Testando o estabelecimento: {nome_estabelecimento}")
+            resposta, confianca = get_resposta(self.robo, nome_estabelecimento)
+            self.assertEqual(confianca, 1.0, f"O adaptador lógico deveria retornar confiança 1.0 para '{nome_estabelecimento}'")
+            self.assertEqual(resposta, resposta_esperada)
 
-class TesteInformacoesBasicas(unittest.TestCase):
+    def testar_03_estabelecimento_nao_encontrado(self):
+        mensagem = "Hospital que não existe em VCA"
+        resposta_esperada = "Desculpe, não entendi. Poderia repetir a pergunta?" # Resposta padrão do BestMatch
 
-    @classmethod
-    def setUpClass(self):
-        self.inicializado, self.robo = inicializar()
-
-    def testar_00_inicializado(self):
-        self.assertTrue(self.inicializado)
-
-    def testar_01_localizacao(self):
-
-        mensagens = [ "onde o ifba está localizado?", "onde vocês estão localizados?", "onde vocês funcionam?" ]
-
-        for mensagem in mensagens:
-            print(f"testando: {mensagem}")
-
-            resposta = self.robo.get_response(mensagem)
-            self.assertGreaterEqual(resposta.confidence, CONFIANCA_MINIMA)
-            self.assertIn("o ifba fica localizado na avenida sérgio vieira de mello", resposta.text.lower())
-
-    def testar_02_horarios_de_funcionamento(self):
-        mensagens = [ "qual é o horário de funcionamento?", "que horas o ifba fica aberto?", "que horas o ifba funciona?" ]
-
-        for mensagem in mensagens:
-            print(f"testando: {mensagem}")
-
-            resposta = self.robo.get_response(mensagem)
-            self.assertGreaterEqual(resposta.confidence, CONFIANCA_MINIMA)          
-
-class TesteSistemasDeInformacao(unittest.TestCase):
-
-    @classmethod
-    def setUpClass(self):
-        self.inicializado, self.robo = inicializar()
-
-    def testar_00_inicializado(self):
-        self.assertTrue(self.inicializado)
-
-    def testar_01_sobre_o_curso(self):
-        mensagens = [ "o que é o curso?", "como é o curso?" ]
-
-        for mensagem in mensagens:
-            print(f"testando: {mensagem}")
-
-            resposta = self.robo.get_response(mensagem)
-            self.assertGreaterEqual(resposta.confidence, CONFIANCA_MINIMA)
-            self.assertIn("o curso serve para formar profissionais capazes de administrar o fluxo de informações geradas e distribuídas por redes de computadores dentro e fora de uma organização", resposta.text.lower())
-
-    def testar_02_duracao_do_curso(self):
-        mensagens = [ "quanto tempo dura o curso?", "quanto tempo o curso dura" ]
-
-        for mensagem in mensagens:
-            print(f"testando: {mensagem}")
-
-            resposta = self.robo.get_response(mensagem)
-            self.assertGreaterEqual(resposta.confidence, CONFIANCA_MINIMA)
-            self.assertIn("o curso dura 4 anos ou 8 semestres", resposta.text.lower())
-
+        print(f"Testando estabelecimento não existente: {mensagem}")
+        resposta, confianca = get_resposta(self.robo, mensagem)
+        # A confiança será baixa, e a resposta será a padrão
+        self.assertLess(confianca, 0.90)
+        self.assertEqual(resposta, resposta_esperada)
 
 if __name__ == "__main__":
     unittest.main()
