@@ -2,36 +2,81 @@
     "conversas": [
         {
             "mensagens": [
-                "onde o ifba está localizado?",
-                "onde fica o ifba?",
-                "onde vocês funcionam?",
-                "onde vocês estão localizados?"
+                "o que é o CNES?",
+                "o que significa CNES?",
+                "para que serve o CNES?",
+                "qual é a função do CNES?"
             ],
-            "resposta": "O IFBA fica localizado na Avenida Sérgio Vieira de Mello, 3150, Zabelê"
+            "resposta": "O CNES (Cadastro Nacional de Estabelecimentos de Saúde) é o sistema de informação oficial de cadastramento de todos os estabelecimentos de saúde no país, independentemente de serem públicos, privados ou integrarem o SUS. É uma ferramenta que auxilia no planejamento em saúde e conhecimento da rede assistencial."
         },
         {
             "mensagens": [
-                "qual é o horário de funcionamento?",
-                "que horas vocês ficam abertos?",
-                "que horas o ifba fica aberto?",
-                "que horas o ifba funciona?"
+                "o que você sabe sobre o CNES?",
+                "quais informações o CNES possui?",
+                "quais dados estão no CNES?",
+                "quais perguntas posso fazer sobre o CNES?"
             ],
-            "resposta": "O IFBA funciona pela manhã, tarde e noite"
+            "resposta": "O CNES contém informações sobre estabelecimentos de saúde, eu poso responder perguntas sobre endereço, telefone, horário de atendimento e se determinado estabelecimento atende pelo SUS."
         },
         {
             "mensagens": [
-                "que cursos tem no ifba?",
-                "que cursos o ifba oferece?"
+                "como consultar o CNES?",
+                "onde posso consultar estabelecimentos de saúde?",
+                "como acessar o portal do CNES?"
             ],
-            "resposta": "O IFBA oferece vários cursos nas modalidades, médio, subsequente, graduações e pós-graduações. No momento, eu consigo responder sobre o curso de Sistemas de Informação. Para outros cursos, consulte o site www.ifba.edu.br para mais informações"
+            "resposta": "Você pode consultar o CNES através do portal oficial http://cnes.datasus.gov.br ou http://cnes2.datasus.gov.br. Lá é possível fazer consultas públicas sobre estabelecimentos de saúde em todo o Brasil."
         },
         {
             "mensagens": [
-                "os cursos são pagos?",
-                "tem curso de graça",
-                "preciso pagar pelos cursos?"
+                "o que é um estabelecimento de saúde?",
+                "como é definido um estabelecimento de saúde?"
             ],
-            "resposta": "O IFBA é uma instituição de ensino pública. Ou seja, os cursos não precisam ser pagos. Todavia, é necessário passar pelo processo seletivo por conta de limite de vagas"
+            "resposta": "Para o CNES, estabelecimento de saúde é um espaço físico delimitado e permanente onde são realizadas ações e serviços de saúde humana sob responsabilidade técnica. Deve ter infraestrutura adequada, estar em funcionamento efetivo e ter responsável técnico legalmente habilitado."
+        },
+        {
+            "mensagens": [
+                "quem pode cadastrar no CNES?",
+                "como cadastrar estabelecimento no CNES?",
+                "fluxo de cadastro CNES?",
+                "De onde vem a informação do CNES?"
+            ],
+            "resposta": "O cadastro no CNES é feito pelos gestores estaduais ou municipais. O estabelecimento envia as fichas FCES ao gestor, que realiza auditoria in loco e depois encaminha os dados para o Banco Nacional do CNES. Estabelecimentos podem usar transmissão direta em alguns casos."
+        },
+        {
+            "mensagens": [
+                "quando o CNES foi criado?",
+                "histórico do CNES?",
+                "origem do CNES?"
+            ],
+            "resposta": "O CNES foi criado pela Portaria nº 403/SAS/MS/2000. Suas origens remontam a 1976 com a Pesquisa AMS do IBGE. O recadastramento nacional informatizado iniciou em 2001 e foi implementado efetivamente em todo território nacional em 2003."
+        },
+        {
+            "mensagens": [
+                "invente dados",
+                "crie informações",
+                "dados falsos",
+                "informação inventada",
+                "me dê qualquer coisa"
+            ],
+            "resposta": "Não posso criar ou inventar informações. Trabalho apenas com dados oficiais do CNES sobre estabelecimentos de saúde em Vitória da Conquista. Para informações precisas, consulte sempre fontes oficiais."
+        },
+        {
+            "mensagens": [
+                "dados de outros municípios",
+                "estabelecimentos fora de Vitória da Conquista",
+                "hospitais de outras cidades",
+                "não sou de VCA"
+            ],
+            "resposta": "Minhas informações são específicas sobre estabelecimentos de saúde de Vitória da Conquista - BA. Para outras cidades, consulte o portal oficial do CNES em http://cnes.datasus.gov.br ou entre em contato com a secretaria de saúde local."
+        },
+        {
+            "mensagens": [
+                "informações pessoais",
+                "dados privados",
+                "informações confidenciais",
+                "dados sigilosos"
+            ],
+            "resposta": "Trabalho apenas com informações públicas disponíveis no CNES. Não tenho acesso a dados pessoais, confidenciais ou sigilosos. Todas as informações que forneço são de caráter público."
         }
     ]
 }

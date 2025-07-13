@@ -10,6 +10,7 @@ NOME_ROBO = "Botesus"
 # Apenas as conversas relevantes para o Botesus
 CONVERSAS = [
     "./conversas/saudacoes.json", 
+    "./conversas/informacoes_basicas.json",
     "./conversas/estabelecimentos_saude.json"
 ]
 
