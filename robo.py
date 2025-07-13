@@ -2,26 +2,15 @@ from chatterbot import ChatBot
 from chatterbot.languages import POR
 
 NOME_ROBO = "Botesus"
-CONFIANCA_MINIMA = 0.5 # Reduzido para capturar saudações do BestMatch
+CONFIANCA_MINIMA = 0.85
 
 def inicializar():
     inicializado, robo = False, None
 
     try:
-        robo = ChatBot(
-            NOME_ROBO, 
-            read_only=True, 
-            logic_adapters=[
-                {
-                    "import_path": "adaptador_logico.AdaptadorBotesus"
-                },
-                {
-                    "import_path": "chatterbot.logic.BestMatch",
-                    "default_response": "Desculpe, não entendi. Poderia repetir a pergunta?",
-                    "maximum_similarity_threshold": 0.70
-                }
-            ]
-        )
+        robo = ChatBot(NOME_ROBO, read_only=True, logic_adapters=[{
+            "import_path": "chatterbot.logic.BestMatch"
+        }])
 
         inicializado = True
     except Exception as e:
