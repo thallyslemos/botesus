@@ -1,39 +1,209 @@
 <!doctype html>
 <html>
-  <head>
-    <title>Socket.IO chat</title>
-    <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      body { font: 13px Helvetica, Arial; }
-      form { background: #000; padding: 10px; position: fixed; bottom: 0; width: 100%; }
-      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
-      form button { width: 9%; background: rgb(234, 237, 238); border: none; padding: 10px; }
-      #messages { list-style-type: none; margin: 0; padding: 0; }
-      #messages li { padding: 5px 10px; }
-      #messages li:nth-child(odd) { background: #eee; }
-      #messages { margin-bottom: 40px }
-    </style>
-  </head>
-  <body>
-    <ul id="messages"></ul>
-    <form action="">
-      <input id="m" autocomplete="off" /><button>Enviar</button>
-    </form>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-    <script>
-      $(function () {
-        var socket = io();
-        $('form').submit(function(){
-          socket.emit('chat message', $('#m').val());
+
+<head>
+  <title>BoteSUS - Assistente CNES</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font: 13px Helvetica, Arial;
+      background-color: #f5f5f5;
+    }
+
+    .header {
+      background: #2c5282;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .header h1 {
+      font-size: 18px;
+      margin: 0;
+    }
+
+    .header p {
+      font-size: 12px;
+      margin: 5px 0 0 0;
+      opacity: 0.9;
+    }
+
+    form {
+      background: #2c5282;
+      padding: 10px;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    form input {
+      border: 0;
+      padding: 12px;
+      width: 85%;
+      margin-right: .5%;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    form button {
+      width: 14%;
+      background: #4299e1;
+      border: none;
+      padding: 12px;
+      color: white;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    form button:hover {
+      background: #3182ce;
+    }
+
+    #messages {
+      list-style-type: none;
+      margin: 0;
+      padding: 80px 10px 60px 10px;
+      max-height: calc(100vh - 140px);
+      overflow-y: auto;
+    }
+
+    #messages li {
+      padding: 8px 12px;
+      margin: 5px 0;
+      border-radius: 8px;
+      max-width: 80%;
+    }
+
+    #messages li.user {
+      background: #e2e8f0;
+      margin-left: auto;
+      text-align: right;
+    }
+
+    #messages li.bot {
+      background: #bee3f8;
+      margin-right: auto;
+    }
+
+    .map-container {
+      margin: 10px 0;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .map {
+      height: 200px !important;
+      width: 100% !important;
+      border-radius: 8px;
+    }
+
+    .leaflet-container {
+      height: 200px !important;
+      width: 100% !important;
+    }
+  </style>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+
+<body>
+  <div class="header">
+    <h1>🏥 BoteSUS</h1>
+    <p>Assistente do Cadastro Nacional de Estabelecimentos de Saúde</p>
+  </div>
+
+  <ul id="messages"></ul>
+
+  <form action="">
+    <input id="m" autocomplete="off" placeholder="Digite sua pergunta sobre estabelecimentos de saúde..." />
+    <button>Enviar</button>
+  </form>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    var mapCounter = 0;
+
+    function criarMapa(lat, lon, nome) {
+      mapCounter++;
+      var mapId = 'map-' + mapCounter;
+
+      var mapHtml = '<div class="map-container"><div id="' + mapId + '" class="map"></div></div>';
+      $('#messages').append($('<li class="bot">').html('📍 Localização do ' + nome + ':' + mapHtml));
+
+      setTimeout(function () {
+        var map = L.map(mapId).setView([lat, lon], 15);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        L.marker([lat, lon])
+          .addTo(map)
+          .bindPopup('<b>' + nome + '</b><br>Lat: ' + lat + '<br>Lon: ' + lon)
+          .openPopup();
+      }, 100);
+    }
+
+    $(function () {
+      var socket = io();
+
+      // Adicionar mensagem de boas-vindas
+      $('#messages').append($('<li class="bot">').text('🤖 Olá! Sou o BoteSUS, seu assistente do CNES. Como posso ajudá-lo?'));
+
+      $('form').submit(function () {
+        var mensagem = $('#m').val();
+        if (mensagem.trim()) {
+          $('#messages').append($('<li class="user">').text('👤 ' + mensagem));
+          socket.emit('chat message', mensagem);
           $('#m').val('');
-          return false;
-        });
-        socket.on('chat message', function(msg){
-          $('#messages').append($('<li>').text(msg));
-          window.scrollTo(0, document.body.scrollHeight);
-        });
+
+          // Auto-scroll
+          setTimeout(function () {
+            window.scrollTo(0, document.body.scrollHeight);
+          }, 100);
+        }
+        return false;
       });
-    </script>
-  </body>
+
+      socket.on('chat message', function (mensagem) {
+        console.log('Mensagem recebida:', mensagem);
+
+        // Se vier como string simples (compatibilidade)
+        if (typeof mensagem === 'string') {
+          $('#messages').append($('<li class="bot">').text(mensagem));
+          return;
+        }
+
+        // Se vier como objeto com coordenadas
+        var coordenadas = mensagem?.coordenadas;
+        var texto = mensagem.texto || mensagem.resposta || '';
+        var nome = mensagem.nome || '';
+
+        // Mostra o texto da resposta
+        $('#messages').append($('<li class="bot">').text(texto));
+
+        // Se houver coordenadas, mostra o mapa
+        if (coordenadas && coordenadas.lat && coordenadas.lon) {
+          criarMapa(parseFloat(coordenadas.lat), parseFloat(coordenadas.lon), nome);
+        }
+
+        // Auto-scroll
+        setTimeout(function () {
+          window.scrollTo(0, document.body.scrollHeight);
+        }, 100);
+      });
+    });
+  </script>
+</body>
+
 </html>

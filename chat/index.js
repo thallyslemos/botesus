@@ -4,7 +4,7 @@ var server = http.Server(app)
 var io = require('socket.io')(server);
 var port = process.env.PORT || 3000;
 
-const URL_IFBABOT = "http://localhost:6000/resposta/";
+const URL_BOTESUS = "http://localhost:6000/resposta/";
 const CONFIANCA_MINIMA = 0.65;
 
 app.get('/', function (req, res) {
@@ -14,30 +14,52 @@ app.get('/', function (req, res) {
 getResposta = (mensagem) => {
   let dados = "";
 
-  http.get(URL_IFBABOT + mensagem, (resposta) => {
+  http.get(URL_BOTESUS + encodeURIComponent(mensagem), (resposta) => {
     resposta.on("data", (pedaco) => {
       dados += pedaco;
     });
 
     resposta.on("end", () => {
       dados = JSON.parse(dados);
-      if (dados.confianca >= CONFIANCA_MINIMA) {
-        io.emit('chat message', "🤖 " + dados.resposta);
-      } else {
-        io.emit('chat message', "🤖 Ainda não sei responder esta pergunta. Você pode encontrar mais informações sobre o IFBA no site https://portal.ifba.edu.br/conquista");
-      }
       console.log(dados);
+      
+      if (dados.confianca >= CONFIANCA_MINIMA) {
+        // Verificar se a resposta contém coordenadas
+        var coordenadasMatch = dados.resposta.match(/Latitude\s*([-\d.,]+)[,\s]*Longitude\s*([-\d.,]+)/i);
+        var nomeMatch = mensagem.match(/(?:coordenadas|latitude|longitude|mapa).*?(?:do|da|de)\s+([^?]+)/i);
+        
+        if (coordenadasMatch && nomeMatch) {
+          // Extrair coordenadas e nome do estabelecimento
+          var lat = parseFloat(coordenadasMatch[1].replace(',', '.'));
+          var lon = parseFloat(coordenadasMatch[2].replace(',', '.'));
+          var nome = nomeMatch[1].trim();
+          
+          // Enviar resposta com coordenadas para criar mapa
+          io.emit('chat message', {
+            coordenadas: { lat: lat, lon: lon },
+            nome: nome,
+            texto: dados.resposta
+          });
+        } else {
+          // Resposta normal de texto
+          io.emit('chat message', "🤖 " + dados.resposta);
+        }
+      } else {
+        io.emit('chat message', "🤖 Desculpe, não encontrei informações sobre esse estabelecimento de saúde. Verifique o nome e tente novamente.");
+      }
     });
-  })
+  }).on('error', (err) => {
+    console.error('Erro na requisição:', err);
+    io.emit('chat message', "🤖 Desculpe, ocorreu um erro interno. Tente novamente em alguns instantes.");
+  });
 }
 
 io.on('connection', function (socket) {
   socket.on('chat message', function (msg) {
-    io.emit('chat message', "👤 " + msg);
     getResposta(msg);
   });
 });
 
 server.listen(port, function () {
-  console.log('listening on *:' + port);
+  console.log('BoteSUS Chat listening on *:' + port);
 });
