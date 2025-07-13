@@ -45,7 +45,8 @@ def mapear_gestao(codigo):
         "M": "Municipal",
         "E": "Estadual",
         "D": "Dupla (Estadual e Municipal)",
-        "S": "S",
+        "S": "Sem gestão",
+        "Z": "Não informada"
     }
     return mapa.get(codigo, "Não informada")
 
@@ -76,7 +77,11 @@ def gerar_conversas(estabelecimentos, codigo_ibge=None):
         endereco_completo = f"{logradouro}, {numero}, {bairro}".strip(", ")
         if endereco_completo:
             conversas["conversas"].append({
-                "mensagens": [f"Qual o endereço do {nome}?", f"Onde fica o {nome}?"],
+                "mensagens": [
+                    f"Qual o endereço do {nome}?", 
+                    f"Onde fica o {nome}?", 
+                    f"Onde está localizado o {nome}?"
+                ],
                 "resposta": f"O endereço do {nome} é: {endereco_completo}."
             })
 
@@ -84,7 +89,11 @@ def gerar_conversas(estabelecimentos, codigo_ibge=None):
         telefone = est.get("NU_TELEFONE")
         if telefone:
             conversas["conversas"].append({
-                "mensagens": [f"Qual o telefone do {nome}?", f"Qual o contato do {nome}?"],
+                "mensagens": [
+                    f"Qual o telefone do {nome}?", 
+                    f"Qual o contato do {nome}?", 
+                    f"Como entrar em contato com o {nome}?"
+                ],
                 "resposta": f"O telefone do {nome} é: {telefone}."
             })
 
@@ -92,7 +101,11 @@ def gerar_conversas(estabelecimentos, codigo_ibge=None):
         turno = est.get("DS_TURNO_ATENDIMENTO")
         if turno:
             conversas["conversas"].append({
-                "mensagens": [f"Qual o horário de funcionamento do {nome}?", f"O {nome} funciona que horas?"],
+                "mensagens": [
+                    f"Qual o horário de funcionamento do {nome}?", 
+                    f"O {nome} funciona que horas?", 
+                    f"Que horas abre o {nome}?"
+                ],
                 "resposta": f"O horário de atendimento do {nome} é: {turno}."
             })
 
@@ -100,14 +113,22 @@ def gerar_conversas(estabelecimentos, codigo_ibge=None):
         atende_sus = est.get("CO_AMBULATORIAL_SUS", "Não informado").upper()
         resposta_sus = "Sim" if atende_sus == "SIM" else "Não"
         conversas["conversas"].append({
-            "mensagens": [f"O {nome} atende pelo SUS?", f"Posso usar o SUS no {nome}?"],
+            "mensagens": [
+                f"O {nome} atende pelo SUS?", 
+                f"Posso usar o SUS no {nome}?", 
+                f"O {nome} aceita SUS?"
+            ],
             "resposta": f"{resposta_sus}, o {nome} {'atende' if resposta_sus == 'Sim' else 'não atende'} pelo SUS."
         })
 
         # Tipo de Gestão
         gestao = mapear_gestao(est.get("TP_GESTAO"))
         conversas["conversas"].append({
-            "mensagens": [f"Qual o tipo de gestão do {nome}?", f"Quem administra o {nome}?"],
+            "mensagens": [
+                f"Qual o tipo de gestão do {nome}?", 
+                f"Quem administra o {nome}?", 
+                f"Qual a administração do {nome}?"
+            ],
             "resposta": f"A gestão do {nome} é: {gestao}."
         })
 
@@ -116,7 +137,11 @@ def gerar_conversas(estabelecimentos, codigo_ibge=None):
         lon = est.get("NU_LONGITUDE")
         if lat and lon:
             conversas["conversas"].append({
-                "mensagens": [f"Quais as coordenadas do {nome}?", f"Qual a latitude e longitude do {nome}?"],
+                "mensagens": [
+                    f"Quais as coordenadas do {nome}?", 
+                    f"Qual a latitude e longitude do {nome}?", 
+                    f"Onde fica o {nome} no mapa?"
+                ],
                 "resposta": f"As coordenadas do {nome} são: Latitude {lat}, Longitude {lon}."
             })
 
