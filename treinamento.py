@@ -1,6 +1,5 @@
 from chatterbot import ChatBot
 from chatterbot.trainers import ListTrainer
-from chatterbot.languages import POR
 
 import json
 import os
@@ -18,7 +17,7 @@ def inicializar():
     inicializado, treinador = False, None
 
     try:
-        robo = ChatBot(name=NOME_ROBO, tagger_language=POR)
+        robo = ChatBot(name=NOME_ROBO)
         treinador = ListTrainer(robo)
 
         inicializado = True

@@ -1,6 +1,5 @@
 from chatterbot import ChatBot
 from chatterbot.languages import POR
-from adaptador_logico import AdaptadorBotesus
 
 NOME_ROBO = "Botesus"
 CONFIANCA_MINIMA = 0.5 # Reduzido para capturar saudações do BestMatch
@@ -19,10 +18,9 @@ def inicializar():
                 {
                     "import_path": "chatterbot.logic.BestMatch",
                     "default_response": "Desculpe, não entendi. Poderia repetir a pergunta?",
-                    "maximum_similarity_threshold": 0.90
+                    "maximum_similarity_threshold": 0.70
                 }
-            ],
-            tagger_language=POR
+            ]
         )
 
         inicializado = True
@@ -33,7 +31,7 @@ def inicializar():
 
 # 🤖👤
 def get_resposta(robo, mensagem):
-    resposta = robo.get_response(mensagem)
+    resposta = robo.get_response(mensagem.lower().strip())
 
     return resposta.text, resposta.confidence
 
