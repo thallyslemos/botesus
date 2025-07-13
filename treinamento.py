@@ -55,7 +55,6 @@ def treinar(treinador, conversas):
             resposta = mensagens_resposta["resposta"]
 
             for mensagem in mensagens:
-                # print(f"Treinando o par: {mensagem} -> {resposta}")
                 treinador.train([mensagem.lower(), resposta])
                 total_treinado += 1
     print(f"Total de {total_treinado} pares de mensagem/resposta treinados.")

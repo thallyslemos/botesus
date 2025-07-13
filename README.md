@@ -10,12 +10,11 @@ O robô utiliza a base de dados do OpenSUS, que contém informações detalhadas
 
 O Botesus é treinado para responder a uma variedade de perguntas sobre os estabelecimentos de saúde, incluindo:
 
-*   **Localização:** "Onde encontro um posto de saúde no bairro X?"
+*   **Localização:** "Onde fica o IBR Hospital no mapa?"
 *   **Endereço:** "Qual o endereço da UPA?"
-*   **Contato:** "Qual o telefone do Posto de Saúde Y?"
-*   **Horário de Funcionamento:** "Qual o horário de atendimento do estabelecimento Z?"
-*   **Serviços:** "O estabelecimento X atende pelo SUS?"
-*   **Informações por Município:** "Quantos hospitais existem em Vitória da Conquista?"
+*   **Contato:** "Qual o telefone do Posto de Saúde dos Campinhos?"
+*   **Horário de Funcionamento:** "Qual o horário de atendimento do SAMUR?"
+*   **Serviços:** "O Hospital de são Geraldo atende pelo SUS?"
 
 ## Como Usar
 
@@ -46,7 +45,7 @@ O Botesus é treinado para responder a uma variedade de perguntas sobre os estab
 4.  **Baixe o modelo de linguagem para o Spacy:**
     O ChatterBot utiliza a biblioteca Spacy, que precisa de um modelo de linguagem específico para o português.
     ```bash
-    python3 -m spacy download pt_core_news_sm
+    python3 -m spacy download en_core_news_sm
     ```
 
 ### Preparando os Dados e Treinando o Modelo
@@ -54,9 +53,9 @@ O Botesus é treinado para responder a uma variedade de perguntas sobre os estab
 Para que o Botesus possa responder às perguntas, ele precisa ser treinado com os dados dos estabelecimentos de saúde.
 
 1.  **Preparação dos Dados:**
-    Execute o script `preparar_dados.py` para processar os dados brutos do OpenSUS (arquivos JSON na pasta `assets/`) e gerar os arquivos de conversação para o treinamento.
+    Execute o script `preparar_dados.py` para processar os dados brutos do OpenSUS (arquivos JSON na pasta `assets/`) e gerar os arquivos de conversação para o treinamento. Esse script aceita como argumento o condigo IBGE sem o dígito verificar da cidade (por exemplo, `293330` para Vitória da Conquista).
     ```bash
-    python3 preparar_dados.py
+    python3 preparar_dados.py --ibge 293330
     ```
     Este script irá gerar um novo arquivo de conversas em `conversas/estabelecimentos_saude.json`.
 

@@ -26,13 +26,12 @@ getResposta = (mensagem) => {
       if (dados.confianca >= CONFIANCA_MINIMA) {
         // Verificar se a resposta contém coordenadas
         var coordenadasMatch = dados.resposta.match(/Latitude\s*([-\d.,]+)[,\s]*Longitude\s*([-\d.,]+)/i);
-        var nomeMatch = mensagem.match(/(?:coordenadas|latitude|longitude|mapa).*?(?:do|da|de)\s+([^?]+)/i);
-        
-        if (coordenadasMatch && nomeMatch) {
+        if (coordenadasMatch) {
           // Extrair coordenadas e nome do estabelecimento
           var lat = parseFloat(coordenadasMatch[1].replace(',', '.'));
           var lon = parseFloat(coordenadasMatch[2].replace(',', '.'));
-          var nome = nomeMatch[1].trim();
+          var nome = "Estabelecimento"
+          console.log(`Coordenadas: ${lat}, ${lon} - Nome: ${nome}`);
           
           // Enviar resposta com coordenadas para criar mapa
           io.emit('chat message', {

@@ -9,8 +9,8 @@ inicializado, robo = inicializar()
 @servico.get("/")
 def get_info():
     info = {
-        "descrição": "Robô de atendimento do IFBA",
-        "email": "luispscarvalho@gmail.com",
+        "descrição": "Robô de atendimento virtual Botesus",
+        "email": "thallysvilemos@gmail.com",
         "versão": "1.0"
     }
 

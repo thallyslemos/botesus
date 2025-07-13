@@ -1,13 +1,36 @@
-# chat-example
+# BoteSUS - Interface Web
 
-This is the source code for a very simple chat example used for
-the [Getting Started](http://socket.io/get-started/chat/) guide
-of the Socket.IO website.
+Esta é a interface web do BoteSUS, um assistente do Cadastro Nacional de Estabelecimentos de Saúde (CNES).
 
-Please refer to it to learn how to run this application.
+## Funcionalidades
 
-You can also spin up a free Heroku dyno to test it out:
+- Chat em tempo real com o BoteSUS
+- Visualização de mapas interativos para coordenadas de estabelecimentos
+- Interface responsiva e moderna
+- Integração com a API do BoteSUS
 
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/socketio/chat-example)
+## Como executar
 
-Besides, the application is deployed on [Now](https://zeit.co/now): https://socketio-chat-example.now.sh/
+1. Certifique-se de que o serviço Python está rodando:
+   ```bash
+   python3 servico.py
+   ```
+
+2. Instale as dependências do Node.js:
+   ```bash
+   npm install
+   ```
+
+3. Execute o servidor web:
+   ```bash
+   node index.js
+   ```
+
+4. Acesse: http://localhost:3000
+
+## Tecnologias utilizadas
+
+- Node.js + Express
+- Socket.IO para comunicação em tempo real
+- Leaflet para mapas interativos
+- HTML/CSS/JavaScript puro
