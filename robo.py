@@ -2,7 +2,7 @@ from chatterbot import ChatBot
 from chatterbot.languages import POR
 
 NOME_ROBO = "Botesus"
-CONFIANCA_MINIMA = 0.85
+CONFIANCA_MINIMA = 0.75
 
 def inicializar():
     inicializado, robo = False, None

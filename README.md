@@ -53,7 +53,8 @@ O Botesus é treinado para responder a uma variedade de perguntas sobre os estab
 Para que o Botesus possa responder às perguntas, ele precisa ser treinado com os dados dos estabelecimentos de saúde.
 
 1.  **Preparação dos Dados:**
-    Execute o script `preparar_dados.py` para processar os dados brutos do OpenSUS (arquivos JSON na pasta `assets/`) e gerar os arquivos de conversação para o treinamento. Esse script aceita como argumento o condigo IBGE sem o dígito verificar da cidade (por exemplo, `293330` para Vitória da Conquista).
+    - Faça o download dos arquivos JSON do [OpenDataSUS](https://opendatasus.saude.gov.br/dataset/cnes-cadastro-nacional-de-estabelecimentos-de-saude/resource/cd884664-b378-4c6c-854b-6a08faa25d19), extraia o conteúdo JSON e coloque-os na pasta `assets/`. Esses arquivos contêm informações sobre os estabelecimentos de saúde em Vitória da Conquista.
+    - Execute o script `preparar_dados.py` para processar os dados brutos do OpenSUS (arquivos JSON na pasta `assets/`) e gerar os arquivos de conversação para o treinamento. Esse script aceita como argumento o condigo IBGE sem o dígito verificar da cidade (por exemplo, `293330` para Vitória da Conquista).
     ```bash
     python3 preparar_dados.py --ibge 293330
     ```
